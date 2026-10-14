@@ -1,6 +1,9 @@
 
 import prisma from "../lib/prisma.js";
-import type { CreateProductInput } from "../schemas/product.schema.js";
+import type {
+  CreateProductInput,
+  UpdateProductInput,
+} from "../schemas/product.schema.js";
 
 export const productRepository = {
   async findAll() {
@@ -23,7 +26,11 @@ export const productRepository = {
     return prisma.product.findUnique({
       where: { id },
       include: {
-        images: true,
+        images: {
+          orderBy: {
+            sortOrder: "asc",
+          },
+        },
         specifications: true,
       },
     });
@@ -62,7 +69,57 @@ export const productRepository = {
         },
       },
       include: {
-        images: true,
+        images: {
+          orderBy: {
+            sortOrder: "asc",
+          },
+        },
+        specifications: true,
+      },
+    });
+  },
+
+  async update(id: string, data: UpdateProductInput) {
+    const {
+      images = [],
+      specifications = [],
+      ...productData
+    } = data;
+
+    const {
+      seoTitle,
+      metaDescription,
+      ...requiredData
+    } = productData;
+
+    return prisma.product.update({
+      where: { id },
+      data: {
+        ...requiredData,
+        seoTitle: seoTitle ?? null,
+        metaDescription: metaDescription ?? null,
+        images: {
+          deleteMany: {},
+          create: images.map((image) => ({
+            url: image.url,
+            isPrimary: image.isPrimary,
+            sortOrder: image.sortOrder,
+          })),
+        },
+        specifications: {
+          deleteMany: {},
+          create: specifications.map((specification) => ({
+            key: specification.key,
+            value: specification.value,
+          })),
+        },
+      },
+      include: {
+        images: {
+          orderBy: {
+            sortOrder: "asc",
+          },
+        },
         specifications: true,
       },
     });
@@ -77,6 +134,7 @@ export const productRepository = {
       },
     });
   },
+  
 
   async findBySlug(slug: string) {
     return prisma.product.findUnique({
@@ -87,4 +145,10 @@ export const productRepository = {
       },
     });
   },
+    async delete(id: string) {
+    return prisma.product.delete({
+      where: { id },
+    });
+  },
 };
+
