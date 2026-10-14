@@ -60,3 +60,18 @@ model ProductSpecification {
 
   @@index([productId])
 }
+
+
+enum AdminRole {
+  ADMIN
+}
+
+model Admin {
+  id           String    @id @default(cuid())
+  adminId      String    @unique @db.VarChar(50)
+  passwordHash String    @db.VarChar(255)
+  role         AdminRole @default(ADMIN)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}

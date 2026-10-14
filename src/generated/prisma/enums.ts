@@ -16,3 +16,10 @@ export const ProductAvailability = {
 } as const
 
 export type ProductAvailability = (typeof ProductAvailability)[keyof typeof ProductAvailability]
+
+
+export const AdminRole = {
+  ADMIN: 'ADMIN'
+} as const
+
+export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]

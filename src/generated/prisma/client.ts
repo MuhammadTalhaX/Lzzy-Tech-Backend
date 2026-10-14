@@ -56,3 +56,8 @@ export type ProductImage = Prisma.ProductImageModel
  * 
  */
 export type ProductSpecification = Prisma.ProductSpecificationModel
+/**
+ * Model Admin
+ * 
+ */
+export type Admin = Prisma.AdminModel
