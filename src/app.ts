@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import productRoutes from "./routes/product.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 import { notFoundHandler } from "./middleware/not-found.js";
 import { errorHandler } from "./middleware/error-handler.js";
 
@@ -26,6 +27,9 @@ app.get("/api/health", (_req, res) => {
 
 // Product API routes
 app.use("/api/products", productRoutes);
+
+// Authentication API routes
+app.use("/api/auth", authRoutes);
 
 // Handle unknown routes (must come after API routes)
 app.use(notFoundHandler);
