@@ -769,7 +769,9 @@ export const ProductScalarFieldEnum = {
   seoTitle: 'seoTitle',
   metaDescription: 'metaDescription',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isArchived: 'isArchived',
+  archivedAt: 'archivedAt'
 } as const
 
 export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]

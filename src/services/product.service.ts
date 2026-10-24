@@ -10,6 +10,10 @@ export class ProductService {
     return productRepository.findAll();
   }
 
+  async getArchivedProducts() {
+    return productRepository.findArchived();
+  }
+
   async getProductById(id: string) {
     const product = await productRepository.findById(id);
 
@@ -59,13 +63,29 @@ export class ProductService {
   }
 
   async deleteProduct(id: string) {
-    const existingProduct = await productRepository.findById(id);
+    const product =
+      await productRepository.findByIdIncludingArchived(id);
 
-    if (!existingProduct) {
+    if (!product || product.isArchived) {
       throw new Error("PRODUCT_NOT_FOUND");
     }
 
-    await productRepository.delete(id);
+    await productRepository.archive(id);
+  }
+
+  async restoreProduct(id: string) {
+    const product =
+      await productRepository.findByIdIncludingArchived(id);
+
+    if (!product) {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+
+    if (!product.isArchived) {
+      throw new Error("PRODUCT_NOT_ARCHIVED");
+    }
+
+    return productRepository.restore(id);
   }
 }
 

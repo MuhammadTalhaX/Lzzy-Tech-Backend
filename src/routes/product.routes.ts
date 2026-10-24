@@ -1,3 +1,4 @@
+
 import { Router } from "express";
 import { productController } from "../controllers/product.controller.js";
 import { authenticateAdmin } from "../middleware/authenticate-admin.js";
@@ -9,11 +10,16 @@ import {
 
 const router = Router();
 
-// Public routes
+// Public routes: active products only
 router.get("/", productController.getAllProducts);
-router.get("/:id", productController.getProductById);
 
 // Admin-only routes
+router.get(
+  "/archived",
+  authenticateAdmin,
+  productController.getArchivedProducts,
+);
+
 router.post(
   "/",
   authenticateAdmin,
@@ -33,5 +39,14 @@ router.delete(
   authenticateAdmin,
   productController.deleteProduct,
 );
+
+router.post(
+  "/:id/restore",
+  authenticateAdmin,
+  productController.restoreProduct,
+);
+
+// Public product detail; archived products return not found
+router.get("/:id", productController.getProductById);
 
 export default router;
