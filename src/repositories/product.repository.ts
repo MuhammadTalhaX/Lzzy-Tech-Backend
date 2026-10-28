@@ -54,13 +54,24 @@ export const productRepository = {
       ...productData
     } = data;
 
-    const { seoTitle, metaDescription, ...requiredData } = productData;
+    const {
+      seoTitle,
+      metaDescription,
+      discountedPrice,
+      ...requiredData
+    } = productData;
 
     return prisma.product.create({
       data: {
         ...requiredData,
+
+        ...(discountedPrice !== undefined
+          ? { discountedPrice }
+          : {}),
+
         seoTitle: seoTitle ?? null,
         metaDescription: metaDescription ?? null,
+
         images: {
           create: images.map((image) => ({
             url: image.url,
@@ -68,6 +79,7 @@ export const productRepository = {
             sortOrder: image.sortOrder,
           })),
         },
+
         specifications: {
           create: specifications.map((specification) => ({
             key: specification.key,
@@ -86,14 +98,25 @@ export const productRepository = {
       ...productData
     } = data;
 
-    const { seoTitle, metaDescription, ...requiredData } = productData;
+    const {
+      seoTitle,
+      metaDescription,
+      discountedPrice,
+      ...requiredData
+    } = productData;
 
     return prisma.product.update({
       where: { id },
       data: {
         ...requiredData,
+
+        ...(discountedPrice !== undefined
+          ? { discountedPrice }
+          : {}),
+
         seoTitle: seoTitle ?? null,
         metaDescription: metaDescription ?? null,
+
         images: {
           deleteMany: {},
           create: images.map((image) => ({
@@ -102,6 +125,7 @@ export const productRepository = {
             sortOrder: image.sortOrder,
           })),
         },
+
         specifications: {
           deleteMany: {},
           create: specifications.map((specification) => ({

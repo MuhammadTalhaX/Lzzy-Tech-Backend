@@ -22,8 +22,7 @@ model Product {
   category        String              @db.VarChar(100)
   brand           String              @db.VarChar(100)
   price           Decimal             @db.Decimal(12, 2)
-  cost            Decimal             @db.Decimal(12, 2)
-  availability    ProductAvailability @default(AVAILABLE)
+  discountedPrice Decimal?            @db.Decimal(12, 2)
   description     String              @db.Text
   seoTitle        String?             @db.VarChar(200)
   metaDescription String?             @db.VarChar(320)
@@ -37,7 +36,6 @@ model Product {
 
   @@index([category])
   @@index([brand])
-  @@index([availability])
   @@index([createdAt])
 }
 
