@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import productRoutes from "./routes/product.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import orderRoutes from "./routes/order.routes.js";
 import { notFoundHandler } from "./middleware/not-found.js";
 import { errorHandler } from "./middleware/error-handler.js";
 
@@ -31,7 +32,10 @@ app.use("/api/products", productRoutes);
 // Authentication API routes
 app.use("/api/auth", authRoutes);
 
-// Handle unknown routes (must come after API routes)
+// Order API routes
+app.use("/api/orders", orderRoutes);
+
+// Handle unknown routes (must come after all API routes)
 app.use(notFoundHandler);
 
 // Handle errors (must be last)

@@ -1,78 +1,28 @@
+
 import type { ErrorRequestHandler } from "express";
-import { ZodError } from "zod";
-import { Prisma } from "../generated/prisma/client.js";
 
 export const errorHandler: ErrorRequestHandler = (
-  error,
+  err,
   _req,
   res,
-  next,
+  _next,
 ) => {
-  if (res.headersSent) {
-    return next(error);
-  }
+  console.error("Unhandled API error:", err);
 
-  // Zod validation errors
-  if (error instanceof ZodError) {
-    res.status(400).json({
-      success: false,
-      message: "Validation failed",
-      errors: error.issues.map((issue) => ({
-        field: issue.path.join("."),
-        message: issue.message,
-      })),
-    });
-    return;
-  }
+  const statusCode =
+    typeof err?.statusCode === "number" &&
+    err.statusCode >= 400 &&
+    err.statusCode <= 599
+      ? err.statusCode
+      : 500;
 
-  // Prisma database errors
-  if (
-    error instanceof Prisma.PrismaClientKnownRequestError &&
-    error.code === "P2002"
-  ) {
-    res.status(409).json({
-      success: false,
-      message: "A record with this unique value already exists",
-    });
-    return;
-  }
+  const message =
+    statusCode !== 500 && typeof err?.message === "string"
+      ? err.message
+      : "Internal server error";
 
-  // Product service errors
-  if (error instanceof Error) {
-    const knownErrors: Record<
-      string,
-      { status: number; message: string }
-    > = {
-      PRODUCT_NOT_FOUND: {
-        status: 404,
-        message: "Product not found",
-      },
-      PRODUCT_SKU_ALREADY_EXISTS: {
-        status: 409,
-        message: "A product with this SKU already exists",
-      },
-      PRODUCT_SLUG_ALREADY_EXISTS: {
-        status: 409,
-        message: "A product with this slug already exists",
-      },
-    };
-
-    const knownError = knownErrors[error.message];
-
-    if (knownError) {
-      res.status(knownError.status).json({
-        success: false,
-        message: knownError.message,
-      });
-      return;
-    }
-  }
-
-  // Unexpected server errors
-  console.error("Unhandled API error:", error);
-
-  res.status(500).json({
+  res.status(statusCode).json({
     success: false,
-    message: "Internal server error",
+    message,
   });
 };

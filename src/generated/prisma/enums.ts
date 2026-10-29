@@ -9,17 +9,42 @@
 * 🟢 You can import this file directly.
 */
 
-export const ProductAvailability = {
-  AVAILABLE: 'AVAILABLE',
-  LIMITED: 'LIMITED',
-  OUT_OF_STOCK: 'OUT_OF_STOCK'
-} as const
-
-export type ProductAvailability = (typeof ProductAvailability)[keyof typeof ProductAvailability]
-
-
 export const AdminRole = {
   ADMIN: 'ADMIN'
 } as const
 
 export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]
+
+
+export const OrderStatus = {
+  PENDING_PAYMENT: 'PENDING_PAYMENT',
+  PAYMENT_SUBMITTED: 'PAYMENT_SUBMITTED',
+  PAYMENT_VERIFIED: 'PAYMENT_VERIFIED',
+  PROCESSING: 'PROCESSING',
+  SHIPPED: 'SHIPPED',
+  DELIVERED: 'DELIVERED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
+
+
+export const OrderPaymentStatus = {
+  PENDING: 'PENDING',
+  SUBMITTED: 'SUBMITTED',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type OrderPaymentStatus = (typeof OrderPaymentStatus)[keyof typeof OrderPaymentStatus]
+
+
+export const SaleStatus = {
+  CONFIRMED: 'CONFIRMED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]

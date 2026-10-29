@@ -61,3 +61,28 @@ export type ProductSpecification = Prisma.ProductSpecificationModel
  * 
  */
 export type Admin = Prisma.AdminModel
+/**
+ * Model Order
+ * 
+ */
+export type Order = Prisma.OrderModel
+/**
+ * Model OrderItem
+ * 
+ */
+export type OrderItem = Prisma.OrderItemModel
+/**
+ * Model Sale
+ * 
+ */
+export type Sale = Prisma.SaleModel
+/**
+ * Model SaleItem
+ * 
+ */
+export type SaleItem = Prisma.SaleItemModel
+/**
+ * Model OrderCounter
+ * 
+ */
+export type OrderCounter = Prisma.OrderCounterModel
